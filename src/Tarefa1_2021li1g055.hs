@@ -92,3 +92,27 @@ caixaTemBase :: Coordenadas -> [(Peca, Coordenadas)] -> Bool
 caixaTemBase _ [] = False
 caixaTemBase (x, y) ((p,(a,b)):t) | x == a && y == b && (p == Caixa || p == Bloco) = True
                                   | otherwise = caixaTemBase (x, y) t
+
+{-
+== Espaços Vazios
+
+A funcão 'espacosVazios' é a função que vai verificar se existe pelo menos um Vazio no mapa
+
+Assim a função divide-se em duas condições:
+
+* Primeiro verifica se existe algum Vazio declarado na lista e, se existir, devolve True. Esta utiliza como função auxiliar a função 'soPecas' que serve para
+fazer uma lista só das peças do mapa
+
+* A segunda condição verifica se o número de elementos dados da lista é menor que a área do mapa. Se isto se verificar então há blocos vazios, logo retorna True.
+-}
+
+espacosVazios :: [(Peca,Coordenadas)] -> Bool
+espacosVazios [] = False 
+espacosVazios l | elem Vazio (soPecas l) = True 
+                | otherwise = length l < ((x+1) * (y +1))
+                where x = maximum (map fst (soCoordenadas l))
+                      y = maximum (map snd (soCoordenadas l))
+
+soPecas :: [(Peca,Coordenadas)] -> [Peca]
+soPecas [] = []
+soPecas (x:xs) = fst x : soPecas xs
