@@ -14,4 +14,6 @@ testsT1 =
     , "Tarefa 1 - Teste Valida Mapa com chão não contínuo" ~: validaPotencialMapa m1' ~=? False
     , "Tarefa 1 - Teste valida Mapa com chão não contínuo 2" ~: validaPotencialMapa m2 ~=? False
     , "Tarefa 1 - Teste Valida Mapa com coordenadas iguais" ~: validaPotencialMapa [(Bloco,(0,1)),(Bloco,(1,1)), (Bloco,(0,1))]~=? False
+    , "Tarefa 1 - Teste Valida Mapa caixa flutuante" ~: validaPotencialMapa m3' ~=? False
+    , "Tarefa 1 - Teste Valida Mapa sem vazios" ~: validaPotencialMapa m5 ~=? False
     ]
