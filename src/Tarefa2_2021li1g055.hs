@@ -106,3 +106,36 @@ xmax l = maximum (map fst (soCoordenadas l))
 
 ymax :: [(Peca,Coordenadas)] -> Int 
 ymax l = maximum (map snd (soCoordenadas l))
+{-|
+== Desconstroi Mapa
+
+A função 'descontroiMapa' é a função principal que tem como objetivo transformar um mapa (uma lista de peças) numa lista de pecas e coordenadas. Para isso, vai precisar da função auxiliar 
+'desconstroilinhas'.
+-}
+
+desconstroiMapa :: Mapa -> [(Peca, Coordenadas)]
+desconstroiMapa [] = []
+desconstroiMapa ([]:t)= desconstroiMapa t
+desconstroiMapa l = desconstroilinhas l 0
+
+{-|
+A 'desconstroilinhas' vai receber uma lista de listas de peças, isto é, uma lista com as várias linhas do mapa representadas em listas de peças. Vai receber também um acumulador vindo da 
+função principal que vai ditar o número da linha a "desconstruir", que começa em 0. Para isso, vai chamar a função 'desconstroilinha' para a cabeça da função fornecendo um acumulador novo
+começando em 0 que representa a abcissa das peças (o número de colunas), o acumulador vindo da função principal e ainda o tamanho da lista das peças menos 1, para determinar a abcissa 
+máxima que uma peça poderá ter.     
+-}
+
+desconstroilinhas :: [[Peca]] -> Int -> [(Peca,Coordenadas)]
+desconstroilinhas [] _ = []
+desconstroilinhas (x:t) y = desconstroilinha x 0 y (length x -1) ++ desconstroilinhas t (y+1)
+
+{-|
+A 'desconstroilinha' recebe uma lista de peças (uma linha), um acumulador x que dita o número da coluna e que vem da função 'desconstroilihas', um y que é o número da 
+linha e que vem da função principal e um número xm que é o comprimento da linha menos 1. Vai transformar a linha numa lista de peças e as suas respetivas coordenadas.
+-}
+
+desconstroilinha :: [Peca] -> Int -> Int -> Int -> [(Peca,(Int,Int))]
+desconstroilinha [] _ _ _ = []
+desconstroilinha (p:pcs) x y xm | p == Vazio = desconstroilinha pcs (x+1) y xm
+                                | x /= xm = (p,(x,y)) : desconstroilinha pcs (x+1) y xm
+                                |otherwise = [(p,(x,y))]
