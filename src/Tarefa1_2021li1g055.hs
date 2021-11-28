@@ -1,4 +1,3 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 {- |
 Module      : Tarefa1_2021li1g055
 Description : Validação de um potencial mapa
@@ -14,7 +13,7 @@ import LI12122
 validaPotencialMapa :: [(Peca, Coordenadas)] -> Bool
 validaPotencialMapa [] = False
 validaPotencialMapa [x] = False
-validaPotencialMapa l = validaCoordenadas l && verificarPorta l == 1 && caixaFlutuante l
+validaPotencialMapa l = validaCoordenadas l && verificarPorta l == 1 && caixaFlutuante l && espacosVazios l && chaoContinuo l
 
 {- |
 ==Valida Coordenadas
@@ -116,3 +115,51 @@ espacosVazios l | elem Vazio (soPecas l) = True
 soPecas :: [(Peca,Coordenadas)] -> [Peca]
 soPecas [] = []
 soPecas (x:xs) = fst x : soPecas xs
+
+
+{-|
+== Chão Contínuo
+
+A função 'chaoContinuo' vai verificar se o chão de um mapa é válido, i.e., se o bloco em x == 0, com o maior y (ou seja, mais em baixo) tem ligação contínua 
+com o bloco com o maior x (bloco mais à direita) com o maior y (bloco mais em baixo). Para isso, são necesárias uma série de funções auxiliares: 
+
+* 'soBlocoscomCoordenadas' -> recebe um mapa na forma de lista de peças e respetivas coordenadas e filtra apenas as coordenadas dos blocos da lista.
+
+* 'verificacontinuidade' -> recebe uma lista de coordenadas (que na função principal vai ser a lista das coordenadas dos blocos do mapa) e uma coordenada 
+e tem como objetivo verificar se existe algum bloco à frente, em cima ou em baixo da coordenada dada ( que também é um bloco) garantindo assim a continuidade 
+do chão.
+
+* 'primeirobloco' -> dá a coordenada do primeiro bloco do chão, i.e., o bloco com o maior y da primeira coluna.
+
+* 'primeiracoluna' -> dá uma lista de coordenadas que correspondem às coordenadas de todos os elementos da primeira coluna do mapa.
+
+* 'ultimacoluna' -> dá uma lista de coordenadas que correspondem às coordenadas de todos os elementos da última coluna do mapa. 
+-}
+
+chaoContinuo :: [(Peca, Coordenadas)] -> Bool
+chaoContinuo l = verificacontinuidade (soBlocoscomCoordenadas l) (primeirobloco (primeiracoluna (soCoordenadas l)))
+
+soBlocoscomCoordenadas :: [(Peca, Coordenadas)] -> [Coordenadas]
+soBlocoscomCoordenadas [] = []
+soBlocoscomCoordenadas ((a,(x,y)):t) | a == Bloco = (x,y) : soBlocoscomCoordenadas t 
+                                     | otherwise = soBlocoscomCoordenadas t 
+
+verificacontinuidade :: [Coordenadas] -> Coordenadas -> Bool
+verificacontinuidade l (a,b) | a == maximum (map fst (ultimacoluna l)) = True
+                             | elem (a+1,b) l = verificacontinuidade l (a+1,b)
+                             | elem (a, b-1) l = verificacontinuidade l (a, b-1)
+                             | elem (a, b+1) l = verificacontinuidade l (a, b+1)
+                             | otherwise = False
+
+primeirobloco :: [Coordenadas] -> Coordenadas
+primeirobloco l = (0, maximum (map snd (primeiracoluna l)))
+
+primeiracoluna :: [Coordenadas] -> [Coordenadas]
+primeiracoluna [] = []
+primeiracoluna ((x,y):xs) | x == 0 = (x,y) : primeiracoluna xs
+                          | otherwise = primeiracoluna xs
+ultimacoluna :: [Coordenadas] -> [Coordenadas]
+ultimacoluna [] = []
+ultimacoluna l@((x,y):xs) | x == xm = (x,y) : ultimacoluna xs
+                          | otherwise = ultimacoluna xs
+                       where xm = maximum (map fst l)
