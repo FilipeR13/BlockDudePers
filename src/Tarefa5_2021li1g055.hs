@@ -24,15 +24,15 @@ data Menu = Controlador Opcoes
           | ModoJogo Jogo
           | VenceuJogo
 
-type Estado = Menu
+type Estado = (Menu,Int)
 
 transformaJogo :: Estado -> Picture
-transformaJogo (Controlador Jogar) = Pictures [Color blue $ drawOption "Jogar", Translate (0) (-70) $ drawOption "Sair"]
-transformaJogo (Controlador Sair) = Pictures [drawOption "Jogar",color blue $ Translate (0) (-70) $ drawOption "Sair"]
-transformaJogo (Nivel Nivel1) = Pictures [Color blue $ drawOption "Nivel 1", Translate (0) (-70) $ drawOption "Nivel 2"]
-transformaJogo (Nivel Nivel2) = Pictures [drawOption "Nivel 1",color blue $ Translate (0) (-70) $ drawOption "Nivel 2"]
-transformaJogo VenceuJogo = Translate (-200) 0 $ Color red $ Text "Ganhou"
-transformaJogo (ModoJogo (Jogo j (Jogador (x,y) b d))) = translate adjustx adjusty (pictures $ transformaJogoAux (desconstroiMapa j) (Jogador (x,y) b d))                                              
+transformaJogo (Controlador Jogar,_) = Pictures [Color blue $ drawOption "Jogar", Translate (0) (-70) $ drawOption "Sair"]
+transformaJogo (Controlador Sair,_) = Pictures [drawOption "Jogar",color blue $ Translate (0) (-70) $ drawOption "Sair"]
+transformaJogo (Nivel Nivel1,_) = Pictures [Color blue $ drawOption "Nivel 1", Translate (0) (-70) $ drawOption "Nivel 2"]
+transformaJogo (Nivel Nivel2,_) = Pictures [drawOption "Nivel 1",color blue $ Translate (0) (-70) $ drawOption "Nivel 2"]
+transformaJogo (VenceuJogo,2) = Translate (-200) 0 $ Color red $ Text "Ganhou"
+transformaJogo (ModoJogo (Jogo j (Jogador (x,y) b d)),_) = translate adjustx adjusty (pictures $ transformaJogoAux (desconstroiMapa j) (Jogador (x,y) b d))                                              
                                               where adjusty = -32 * fromIntegral (ymax (desconstroiMapa j)) / 2 
                                                     adjustx = -32 * fromIntegral (xmax (desconstroiMapa j)) / 2
 transformaJogoAux :: [(Peca,Coordenadas)] -> Jogador -> [Picture]
@@ -58,7 +58,7 @@ transformaJogoAux m@((p,(a,b)):t) (Jogador (x,y) dir s)
 drawOption option = Translate (-50) 0 $ Scale (0.5) (0.5) $ Text option
 
 estadoGlossInicial :: Estado 
-estadoGlossInicial = Controlador Jogar
+estadoGlossInicial = (Controlador Jogar,0)
 
 nivel1 :: Jogo
 nivel1 = 
@@ -84,25 +84,30 @@ desenhaEstadoGloss :: Estado -> Picture
 desenhaEstadoGloss = transformaJogo
 
 reageEventoGloss :: Event -> Estado -> Estado
-reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Controlador Jogar) = Nivel Nivel1
-reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Controlador Jogar) =Controlador Sair
-reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Controlador Jogar) = Controlador Sair
-reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Controlador Sair) =Controlador Jogar
-reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Controlador Sair) = Controlador Jogar
-reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Controlador Sair) = undefined
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Controlador Jogar,0) = (Nivel Nivel1,0)
+reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Controlador Jogar,0) = (Controlador Sair,0)
+reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Controlador Jogar,0) = (Controlador Sair,0)
+reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Controlador Sair,0) = (Controlador Jogar,0)
+reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Controlador Sair,0) = (Controlador Jogar,0)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Controlador Sair,0) = undefined
 
-reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Nivel Nivel1) =Nivel Nivel1
-reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel1) = Nivel Nivel2
-reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Nivel Nivel2) =Nivel Nivel1
-reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel2) = Nivel Nivel1
-reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel1) =ModoJogo nivel1
-reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel2) = ModoJogo nivel2
+reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Nivel Nivel1,0) = (Nivel Nivel1,0)
+reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel1,0) = (Nivel Nivel2,0)
+reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Nivel Nivel2,0) = (Nivel Nivel1,0)
+reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel2,0) = (Nivel Nivel1,0)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel1,0) = (ModoJogo nivel1,1)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel2,0) = (ModoJogo nivel2,2)
 
-reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (ModoJogo j) =ModoJogo (moveJogador j Trepar)
-reageEventoGloss  (EventKey (SpecialKey KeyDown) Down _ _) (ModoJogo j) =ModoJogo (moveJogador j InterageCaixa)
-reageEventoGloss  (EventKey (SpecialKey KeyRight) Down _ _) (ModoJogo j) =ModoJogo (moveJogador j AndarDireita)
-reageEventoGloss  (EventKey (SpecialKey KeyLeft) Down _ _) (ModoJogo j) =ModoJogo (moveJogador j AndarEsquerda)
-reageEventoGloss _ (ModoJogo v@((Jogo j (Jogador (x,y) b d)))) = if elem (Porta,(x,y)) (desconstroiMapa j) then (VenceuJogo) else (ModoJogo v)
+reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (ModoJogo j,n) = (ModoJogo (moveJogador j Trepar),n)
+reageEventoGloss  (EventKey (SpecialKey KeyDown) Down _ _) (ModoJogo j,n) = (ModoJogo (moveJogador j InterageCaixa),n)
+reageEventoGloss  (EventKey (SpecialKey KeyRight) Down _ _) (ModoJogo j,n) =(ModoJogo (moveJogador j AndarDireita),n)
+reageEventoGloss  (EventKey (SpecialKey KeyLeft) Down _ _) (ModoJogo j,n) = (ModoJogo (moveJogador j AndarEsquerda),n)
+reageEventoGloss (EventKey r Down _ _) (ModoJogo j,n) | n == 1 = (ModoJogo nivel1,n) 
+                                                      | n == 2 = (ModoJogo nivel2,n)
+
+reageEventoGloss _ (ModoJogo v@((Jogo j (Jogador (x,y) b d))), n) | elem (Porta,(x,y)) (desconstroiMapa j) && n == 1 = (ModoJogo nivel2,2)
+                                                                  | elem (Porta,(x,y)) (desconstroiMapa j) && n == 2 = (VenceuJogo,2)
+                                                                  |otherwise = (ModoJogo v,n)
 reageEventoGloss _ j = j 
 
 reageTempoGloss:: Float -> Estado -> Estado
