@@ -16,7 +16,11 @@ import Graphics.Gloss.Interface.Pure.Game
 data Opcoes = Jogar 
             | Sair
 
+data Niveis = Nivel1 
+            | Nivel2
+
 data Menu = Controlador Opcoes
+          | Nivel Niveis
           | ModoJogo Jogo
           | VenceuJogo
 
@@ -25,6 +29,9 @@ type Estado = Menu
 transformaJogo :: Estado -> Picture
 transformaJogo (Controlador Jogar) = Pictures [Color blue $ drawOption "Jogar", Translate (0) (-70) $ drawOption "Sair"]
 transformaJogo (Controlador Sair) = Pictures [drawOption "Jogar",color blue $ Translate (0) (-70) $ drawOption "Sair"]
+transformaJogo (Nivel Nivel1) = Pictures [Color blue $ drawOption "Nivel 1", Translate (0) (-70) $ drawOption "Nivel 2"]
+transformaJogo (Nivel Nivel2) = Pictures [drawOption "Nivel 1",color blue $ Translate (0) (-70) $ drawOption "Nivel 2"]
+transformaJogo VenceuJogo = Translate (-200) 0 $ Color red $ Text "Ganhou"
 transformaJogo (ModoJogo (Jogo j (Jogador (x,y) b d))) = translate adjustx adjusty (pictures $ transformaJogoAux (desconstroiMapa j) (Jogador (x,y) b d))                                              
                                               where adjusty = -32 * fromIntegral (ymax (desconstroiMapa j)) / 2 
                                                     adjustx = -32 * fromIntegral (xmax (desconstroiMapa j)) / 2
@@ -62,22 +69,40 @@ nivel1 =
     [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]
   ] (Jogador (6, 0) Oeste False)
 
+nivel2 :: Jogo
+nivel2 =
+  Jogo [ [Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
+    [Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
+    [Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
+    [Bloco,Vazio,Vazio,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
+    [Bloco,Porta,Vazio,Bloco,Vazio,Vazio,Vazio,Vazio,Bloco,Vazio,Caixa,Vazio,Bloco,Vazio,Caixa,Vazio,Vazio,Vazio,Vazio,Vazio],
+    [Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Vazio,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco],
+    [Vazio,Vazio,Vazio,Vazio,Vazio,Bloco,Bloco,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio]
+  ] (Jogador (17,4) Este False)
 
 desenhaEstadoGloss :: Estado -> Picture
 desenhaEstadoGloss = transformaJogo
 
 reageEventoGloss :: Event -> Estado -> Estado
-reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Controlador Jogar) = ModoJogo nivel1 
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Controlador Jogar) = Nivel Nivel1
 reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Controlador Jogar) =Controlador Sair
 reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Controlador Jogar) = Controlador Sair
 reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Controlador Sair) =Controlador Jogar
 reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Controlador Sair) = Controlador Jogar
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Controlador Sair) = undefined
 
+reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Nivel Nivel1) =Nivel Nivel1
+reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel1) = Nivel Nivel2
+reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Nivel Nivel2) =Nivel Nivel1
+reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel2) = Nivel Nivel1
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel1) =ModoJogo nivel1
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel2) = ModoJogo nivel2
+
 reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (ModoJogo j) =ModoJogo (moveJogador j Trepar)
 reageEventoGloss  (EventKey (SpecialKey KeyDown) Down _ _) (ModoJogo j) =ModoJogo (moveJogador j InterageCaixa)
 reageEventoGloss  (EventKey (SpecialKey KeyRight) Down _ _) (ModoJogo j) =ModoJogo (moveJogador j AndarDireita)
 reageEventoGloss  (EventKey (SpecialKey KeyLeft) Down _ _) (ModoJogo j) =ModoJogo (moveJogador j AndarEsquerda)
+reageEventoGloss _ (ModoJogo v@((Jogo j (Jogador (x,y) b d)))) = if elem (Porta,(x,y)) (desconstroiMapa j) then (VenceuJogo) else (ModoJogo v)
 reageEventoGloss _ j = j 
 
 reageTempoGloss:: Float -> Estado -> Estado
