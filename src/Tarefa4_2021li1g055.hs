@@ -1,4 +1,3 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 {- |
 Module      : Tarefa4_2021li1g055
 Description : Movimentação do personagem
@@ -154,19 +153,30 @@ substituicaixa ((p1,(x1,y1)):ms) (p,(x,y)) | p1 == p && x1== x && y1 == y= ms
 
 {-|
 A função 'pousaCaixa' começa por verificar se as condições são favoráveis para largar a caixa. Começa por verificar se o jogador está virado para um limites laterais do mapa, pelo que não pode largar
-a caixa. De seguida verifica se existe um bloco ou caixa em cima da posição para onde se pretende pousar a caixa, se existir, a função devolve o jogo tal como o recebeu. Após passar pelas verificações
-anteriores, a função verifica se o jogador tem um bloco ou caixa à sua frente, pois se existir a função irá colocar a caixa na posição acima desse bloco/caixa. Por fim, a função procura o chão onde
-a caixa vai ficar, devolvendo a caixa na posição que corresponde à posição em cima desse chão, para isso a função precisa de uma função auxiliar 'pousaCaixaAux'.
+a caixa. De seguida verifica se existe um bloco ou caixa em cima da posição para onde se pretende pousar a caixa e ainda se existe uma porta no sitio onde se quer pousar a caixa, se existir, 
+a função devolve o jogo tal como o recebeu. Após passar pelas verificações anteriores, a função verifica se o jogador tem um bloco ou caixa à sua frente (para além de verificar se existe uma porta em 
+cima desse possivel blovo/caixa), pois se existir a função irá colocar a caixa na posição acima desse bloco/caixa. Por fim, a função procura o chão onde a caixa vai ficar, devolvendo a caixa na posição 
+que corresponde à posição em cima desse chão, para isso a função precisa de uma função auxiliar 'pousaCaixaAux', de salientar que antes de colocar a caixa, a função verifica se existe uma porta no caminho
+desta com auxílio à função 'existePorta'.
 -}
 pousaCaixa :: Mapa -> Coordenadas -> Direcao -> Jogo
 pousaCaixa l (x,y) d | (x == 0 && d == Oeste) || (x == xmax m && d == Este) =  Jogo l (Jogador (x,y) d True)
-                     | d == Oeste && (elem (Bloco, (x-1,y-1)) m ||  elem (Caixa, (x-1,y-1)) m) = Jogo l (Jogador (x,y) d True)
-                     | d == Este && (elem (Bloco,(x+1,y-1)) m ||  elem (Caixa, (x+1,y-1)) m)= Jogo l (Jogador (x,y) d True)
-                     | d == Oeste && (elem (Bloco,(x-1,y)) m || elem (Caixa, (x-1,y)) m) = Jogo (constroiMapa((Caixa,(x-1,y-1)):m)) (Jogador (x,y) Oeste False)
-                     | d == Este && (elem (Bloco,(x+1,y)) m || elem (Caixa, (x+1,y)) m) = Jogo (constroiMapa((Caixa,(x+1,y-1)):m)) (Jogador (x,y) Este False)
-                     | d == Oeste = Jogo (constroiMapa (pousaCaixaAux m (x-1, y+1) : m)) (Jogador (x,y) Oeste False)
-                     | d == Este =Jogo (constroiMapa (pousaCaixaAux m (x+1, y+1) : m)) (Jogador (x,y) Este False)
+                     | d == Oeste && (elem (Bloco, (x-1,y-1)) m ||  elem (Caixa, (x-1,y-1)) m || elem (Porta, (x-1,y)) m) = Jogo l (Jogador (x,y) d True)
+                     | d == Este && (elem (Bloco,(x+1,y-1)) m ||  elem (Caixa, (x+1,y-1)) m || elem (Porta,(x+1,y)) m) = Jogo l (Jogador (x,y) d True)
+                     | d == Oeste && (elem (Bloco,(x-1,y)) m || elem (Caixa, (x-1,y)) m) && notElem (Porta, (x-1,y-1)) m = Jogo (constroiMapa((Caixa,(x-1,y-1)):m)) (Jogador (x,y) Oeste False)
+                     | d == Este && (elem (Bloco,(x+1,y)) m || elem (Caixa, (x+1,y)) m) && notElem (Porta,(x+1,y+1)) m = Jogo (constroiMapa((Caixa,(x+1,y-1)):m)) (Jogador (x,y) Este False)
+                     | d == Oeste && existePorta m (x-1,y) (pousaCaixaAux m (x-1,y+1))= Jogo (constroiMapa (pousaCaixaAux m (x-1, y+1) : m)) (Jogador (x,y) Oeste False)
+                     | d == Este && existePorta m (x+1,y) (pousaCaixaAux m (x+1,y+1))=Jogo (constroiMapa (pousaCaixaAux m (x+1, y+1) : m)) (Jogador (x,y) Este False)
+                     | otherwise = Jogo l (Jogador (x,y) d True) 
         where m = desconstroiMapa l
+{-|
+A função 'existePorta' verifica se a porta está no local onde a caixa vai ser colocada e no caminho da queda da mesma. Se não, então irá devolver True, caso contrário, devolve False.
+-}
+existePorta :: [(Peca,Coordenadas)] -> Coordenadas -> (Peca, Coordenadas) -> Bool 
+existePorta m (x,y) (p,(x1,y1)) | x == x1 && y == y1 && notElem (Porta, (x,y)) m = True
+                                | elem (Porta, (x,y)) m = False 
+                                | otherwise = existePorta m (x,y+1) (p,(x1,y1))
+
 {-|
 A função 'pousaCaixaAux' começa por verificar se existe o chão imediatamente à frente do jogador. Se este não existir, a função é chamada recursivamente para a posição da linha abaixo, para assim procurar
 o chão mais abaixo.
