@@ -17,13 +17,19 @@ import Data.Maybe
 data Opcoes = Jogar 
             | Sair
 
+data Opcoes2 = Next
+              |Restart
+              |Quit
+              |Resume
+
 data Niveis = Nivel1 
             | Nivel2
 
 data Menu = Controlador Opcoes
+          | Pausa (Opcoes2, Jogo) 
           | Nivel Niveis
           | ModoJogo Jogo
-          | VenceuJogo
+          | VenceuNivel Opcoes2
 
 type Estado = (Menu,Int,([(Peca,Picture)],(Picture,Picture)))
 
@@ -32,7 +38,13 @@ transformaJogo (Controlador Jogar,_,_) = Pictures [Color blue $ drawOption "Joga
 transformaJogo (Controlador Sair,_,_) = Pictures [drawOption "Jogar",color blue $ Translate (0) (-70) $ drawOption "Sair"]
 transformaJogo (Nivel Nivel1,_,_) = Pictures [Color blue $ drawOption "Nivel 1", Translate (0) (-70) $ drawOption "Nivel 2"]
 transformaJogo (Nivel Nivel2,_,_) = Pictures [drawOption "Nivel 1",color blue $ Translate (0) (-70) $ drawOption "Nivel 2"]
-transformaJogo (VenceuJogo,2,_) = Translate (-200) 0 $ Color red $ Text "Ganhou"
+transformaJogo (VenceuNivel Next,1,_) = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450]
+transformaJogo (VenceuNivel Restart,1,_) = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450]
+transformaJogo (VenceuNivel Quit,1,_) = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", Translate (-267.5) (0) $ drawOption2 "Next Level",Translate (35) (0) $ drawOption2 "Restart Level", color blue $  Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450]
+transformaJogo (VenceuNivel Next,2,_) = Translate (-200) 0 $ Color red $ Text "Ganhou"
+--
+transformaJogo (Pausa (Resume,j),_,_) = Pictures [rectangleWire 650 150, color blue $ Translate (-147.5) (-12) $ drawOption3 "Resume", Translate (250) (-12) $ drawOption3 "Quit"]
+transformaJogo (Pausa (Quit,j),_,_) = Pictures [rectangleWire 650 150, Translate (-147.5) (-12) $ drawOption3 "Resume",color blue $ Translate (250) (-12) $ drawOption3 "Quit"]
 transformaJogo (ModoJogo (Jogo j (Jogador (x,y) b d)),_,l) = translate adjustx adjusty (pictures $ transformaJogoAux (desconstroiMapa j) (Jogador (x,y) b d) l)                                              
                                               where adjusty = -32 * fromIntegral (ymax (desconstroiMapa j)) / 2 
                                                     adjustx = -32 * fromIntegral (xmax (desconstroiMapa j)) / 2
@@ -51,6 +63,8 @@ transformaJogoAux m@((p,(a,b)):t) (Jogador (x,y) dir s) l
          d = 32 * fromIntegral (-b)
 
 drawOption option = Translate (-50) 0 $ Scale (0.5) (0.5) $ Text option
+drawOption2 option = Translate (-100) (-190) $ Scale (0.3) (0.3) $ Text option
+drawOption3 option = Translate (-100) (0) $ Scale (0.4) (0.4) $ Text option
 
 estadoGlossInicial :: ([(Peca,Picture)],(Picture,Picture)) -> Estado 
 estadoGlossInicial l = (Controlador Jogar,0,l)
@@ -93,17 +107,36 @@ reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel2,0,l) =
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel1,0,l) =(ModoJogo nivel1,1,l)
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel2,0,l) = (ModoJogo nivel2,2,l)
 
+reageEventoGloss (EventKey (SpecialKey KeyRight) Down _ _ ) (VenceuNivel Next,1,l) = (VenceuNivel Restart,1,l)
+reageEventoGloss (EventKey (SpecialKey KeyRight) Down _ _ ) (VenceuNivel Restart,1,l) = (VenceuNivel Quit,1,l)
+reageEventoGloss (EventKey (SpecialKey KeyRight) Down _ _ ) (VenceuNivel Quit,1,l) = (VenceuNivel Next,1,l)
+reageEventoGloss (EventKey (SpecialKey KeyLeft) Down _ _ ) (VenceuNivel Next,1,l) = (VenceuNivel Quit,1,l)
+reageEventoGloss (EventKey (SpecialKey KeyLeft) Down _ _ ) (VenceuNivel Restart,1,l) = (VenceuNivel Next,1,l)
+reageEventoGloss (EventKey (SpecialKey KeyLeft) Down _ _ ) (VenceuNivel Quit,1,l) = (VenceuNivel Restart,1,l)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _ ) (VenceuNivel Next,1,l) = (ModoJogo nivel2,2,l)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _ ) (VenceuNivel Restart,1,l) = (ModoJogo nivel1,1,l)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _ ) (VenceuNivel Quit,1,l) = (Controlador Jogar,0,l)
+
 reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (ModoJogo j,n,l) = (ModoJogo (moveJogador j Trepar),n,l)
 reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (ModoJogo j,n,l) =( ModoJogo (moveJogador j InterageCaixa),n,l)
 reageEventoGloss  (EventKey (SpecialKey KeyRight) Down _ _) (ModoJogo j,n,l) = (ModoJogo (moveJogador j AndarDireita),n,l)
 reageEventoGloss  (EventKey (SpecialKey KeyLeft) Down _ _) (ModoJogo j,n,l) =(ModoJogo (moveJogador j AndarEsquerda),n,l)
---
+
 reageEventoGloss (EventKey (Char 'r') Down _ _) (ModoJogo j,n,l) | n == 1 = (ModoJogo nivel1,n,l) 
                                                         | n == 2 = (ModoJogo nivel2,n,l)
 
-reageEventoGloss _ (ModoJogo v@((Jogo j (Jogador (x,y) b d))), n,l) | elem (Porta,(x,y)) (desconstroiMapa j) && n == 1 = (ModoJogo nivel2,2,l)
-                                                                  | elem (Porta,(x,y)) (desconstroiMapa j) && n == 2 = (VenceuJogo,2,l)
-                                                                  |otherwise = (ModoJogo v,n,l)
+reageEventoGloss (EventKey (Char 'p') Down _ _ ) (ModoJogo j,n,l) = (Pausa (Resume,j),n,l)
+reageEventoGloss (EventKey (SpecialKey KeyRight) Down _ _ ) (Pausa (Resume,j),n,l) = (Pausa (Quit,j),n,l)
+reageEventoGloss (EventKey (SpecialKey KeyRight) Down _ _ ) (Pausa (Quit,j),n,l) = (Pausa (Resume,j),n,l)
+reageEventoGloss (EventKey (SpecialKey KeyLeft) Down _ _ ) (Pausa (Resume,j),n,l) = (Pausa (Quit,j),n,l)
+reageEventoGloss (EventKey (SpecialKey KeyLeft) Down _ _ ) (Pausa (Quit,j),n,l) = (Pausa (Resume,j),n,l)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _ ) (Pausa (Resume,j),n,l) = (ModoJogo j,n,l)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _ ) (Pausa (Quit,j),n,l) = (Controlador Jogar,0,l)
+
+
+reageEventoGloss _ (ModoJogo v@((Jogo j (Jogador (x,y) b d))), n,l) | elem (Porta,(x,y)) (desconstroiMapa j) && n == 1 = (VenceuNivel Next,1,l)
+                                                                    | elem (Porta,(x,y)) (desconstroiMapa j) && n == 2 = (VenceuNivel Next,2,l)
+                                                                    |otherwise = (ModoJogo v,n,l)
 reageEventoGloss _ j = j 
 
 reageTempoGloss:: Float -> Estado -> Estado
