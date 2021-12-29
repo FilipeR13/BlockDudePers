@@ -31,6 +31,7 @@ data Theme = Default
 data Niveis = Nivel1 
             | Nivel2
             | Nivel3
+            | Nivel4
 
 data Menu = Controlador Opcoes
           | Pausa (Opcoes2, Jogo) 
@@ -62,13 +63,15 @@ transformaJogo (Tema Inferno,_,_,_,n,_,_) | n == 1 = Pictures [translate 12 130 
                                           | n == 2 = Pictures [translate 12 60 $ rectangleWire 285 68,Translate 0 105 $ drawOption4 "Default", Translate 0 35 $ drawOption4 "Minecraft", Translate 0 (-35) $ drawOption4 "Natal",Color blue $  Translate 0 (-105) $ drawOption4 "Inferno"]
                                           | n == 3 = Pictures [translate 12 (-10) $ rectangleWire 285 68,Translate 0 105 $ drawOption4 "Default", Translate 0 35 $ drawOption4 "Minecraft", Translate 0 (-35) $ drawOption4 "Natal",Color blue $  Translate 0 (-105) $ drawOption4 "Inferno"]
                                           | n == 4 = Pictures [translate 12 (-80) $ rectangleWire 285 68,Translate 0 105 $ drawOption4 "Default", Translate 0 35 $ drawOption4 "Minecraft", Translate 0 (-35) $ drawOption4 "Natal",Color blue $  Translate 0 (-105) $ drawOption4 "Inferno"]
-transformaJogo (Nivel Nivel1,_,_,_,_,_,_) = Pictures [Color blue $ Translate (0) (70) $ drawOption "Nivel 1", drawOption "Nivel 2", Translate (0) (-70) $ drawOption "Nivel 3"]
-transformaJogo (Nivel Nivel2,_,_,_,_,_,_) = Pictures [Translate (0) (70) $ drawOption "Nivel 1",color blue  $ drawOption "Nivel 2", Translate (0) (-70) $ drawOption "Nivel 3"]
-transformaJogo (Nivel Nivel3,_,_,_,_,_,_) = Pictures [Translate (0) (70) $ drawOption "Nivel 1", drawOption "Nivel 2", color blue $ Translate (0) (-70) $ drawOption "Nivel 3"] 
+
+transformaJogo (Nivel Nivel1,_,_,_,_,_,_) = Pictures [Color blue $ Translate 0 105 $ drawOption "Nivel 1",translate 0 35 $ drawOption "Nivel 2", Translate 0 (-35) $ drawOption "Nivel 3",translate 0 (-105) $ drawOption "Nivel 4"]
+transformaJogo (Nivel Nivel2,_,_,_,_,_,_) = Pictures [Translate 0 105 $ drawOption "Nivel 1",color blue  $ translate 0 35 $ drawOption "Nivel 2", Translate 0 (-35) $ drawOption "Nivel 3",translate 0 (-105) $ drawOption "Nivel 4"]
+transformaJogo (Nivel Nivel3,_,_,_,_,_,_) = Pictures [Translate 0 105 $ drawOption "Nivel 1", translate 0 35 $ drawOption "Nivel 2", color blue $ Translate 0 (-35) $ drawOption "Nivel 3",translate 0 (-105) $ drawOption "Nivel 4"] 
+transformaJogo (Nivel Nivel4,_,_,_,_,_,_) = Pictures [Translate 0 105 $ drawOption "Nivel 1", translate 0 35 $ drawOption "Nivel 2", Translate 0 (-35) $ drawOption "Nivel 3", color blue $ translate 0 (-105) $ drawOption "Nivel 4"]
+
 transformaJogo (VenceuNivel Next,1,l,_,_,m,p) |m <= 10 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-160) 0 $ Scale (1.5) (1.5) $ p,translate (0) 0 $ Scale (1.5) (1.5) $ p,translate (160) 0 $ Scale (1.5) (1.5) $ p]
                                               |m <= 14 =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-65) 0 $ Scale (1.5) (1.5) $ p,translate 65 0 $ Scale (1.5) (1.5) $ p]
                                               |otherwise =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-3) 0 $ Scale (1.5) (1.5) $ p]
-
 transformaJogo (VenceuNivel Restart ,1,_,_,_,m,p) | m <= 10 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-160) 0 $ Scale (1.5) (1.5) $ p,translate (0) 0 $ Scale (1.5) (1.5) $ p,translate (160) 0 $ Scale (1.5) (1.5) $ p]
                                                   | m <= 14 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450, translate (-65) 0 $ Scale (1.5) (1.5) $ p,translate 65 0 $ Scale (1.5) (1.5) $ p]
                                                   | otherwise = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450, translate (-3) 0 $ Scale (1.5) (1.5) $ p]
@@ -79,7 +82,6 @@ transformaJogo (VenceuNivel Quit,1,_,_,_,m,p) | m <= 10 =  Pictures [Translate (
 transformaJogo (VenceuNivel Next,2,l,_,_,m,p) |m <= 22 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-160) 0 $ Scale (1.5) (1.5) $ p,translate (0) 0 $ Scale (1.5) (1.5) $ p,translate (160) 0 $ Scale (1.5) (1.5) $ p]
                                               |m <= 28 =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-65) 0 $ Scale (1.5) (1.5) $ p,translate 65 0 $ Scale (1.5) (1.5) $ p]
                                               |otherwise =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-3) 0 $ Scale (1.5) (1.5) $ p]
-
 transformaJogo (VenceuNivel Restart ,2,_,_,_,m,p) | m <= 22 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-160) 0 $ Scale (1.5) (1.5) $ p,translate (0) 0 $ Scale (1.5) (1.5) $ p,translate (160) 0 $ Scale (1.5) (1.5) $ p]
                                                   | m <= 28 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450, translate (-65) 0 $ Scale (1.5) (1.5) $ p,translate 65 0 $ Scale (1.5) (1.5) $ p]
                                                   | otherwise = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450, translate (-3) 0 $ Scale (1.5) (1.5) $ p]
@@ -90,13 +92,22 @@ transformaJogo (VenceuNivel Quit,2,_,_,_,m,p) | m <= 22 =  Pictures [Translate (
 transformaJogo (VenceuNivel Next,3,l,_,_,m,p) |m <= 225 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-160) 0 $ Scale (1.5) (1.5) $ p,translate (0) 0 $ Scale (1.5) (1.5) $ p,translate (160) 0 $ Scale (1.5) (1.5) $ p]
                                               |m <= 255 =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-65) 0 $ Scale (1.5) (1.5) $ p,translate 65 0 $ Scale (1.5) (1.5) $ p]
                                               |otherwise =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-3) 0 $ Scale (1.5) (1.5) $ p]
-
 transformaJogo (VenceuNivel Restart ,3,_,_,_,m,p) | m <= 225 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-160) 0 $ Scale (1.5) (1.5) $ p,translate (0) 0 $ Scale (1.5) (1.5) $ p,translate (160) 0 $ Scale (1.5) (1.5) $ p]
                                                   | m <= 255 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450, translate (-65) 0 $ Scale (1.5) (1.5) $ p,translate 65 0 $ Scale (1.5) (1.5) $ p]
                                                   | otherwise = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450, translate (-3) 0 $ Scale (1.5) (1.5) $ p]
 transformaJogo (VenceuNivel Quit,3,_,_,_,m,p) | m <= 225 =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", Translate (-267.5) (0) $ drawOption2 "Next Level",Translate (35) (0) $ drawOption2 "Restart Level", color blue $  Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-160) 0 $ Scale (1.5) (1.5) $ p,translate (0) 0 $ Scale (1.5) (1.5) $ p,translate (160) 0 $ Scale (1.5) (1.5) $ p]
                                                 | m <= 255 =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", Translate (-267.5) (0) $ drawOption2 "Next Level",Translate (35) (0) $ drawOption2 "Restart Level", color blue $  Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-65) 0 $ Scale (1.5) (1.5) $ p,translate 65 0 $ Scale (1.5) (1.5) $ p]
                                                 | otherwise =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", Translate (-267.5) (0) $ drawOption2 "Next Level",Translate (35) (0) $ drawOption2 "Restart Level", color blue $  Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-3) 0 $ Scale (1.5) (1.5) $ p]
+
+transformaJogo (VenceuNivel Next,4,l,_,_,m,p) |m <= 91 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-160) 0 $ Scale (1.5) (1.5) $ p,translate (0) 0 $ Scale (1.5) (1.5) $ p,translate (160) 0 $ Scale (1.5) (1.5) $ p]
+                                              |m <= 99 =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-65) 0 $ Scale (1.5) (1.5) $ p,translate 65 0 $ Scale (1.5) (1.5) $ p]
+                                              |otherwise =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", color blue $ Translate (-267.5) (0) $ drawOption2 "Next Level", Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-3) 0 $ Scale (1.5) (1.5) $ p]
+transformaJogo (VenceuNivel Restart ,4,_,_,_,m,p) | m <= 91 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-160) 0 $ Scale (1.5) (1.5) $ p,translate (0) 0 $ Scale (1.5) (1.5) $ p,translate (160) 0 $ Scale (1.5) (1.5) $ p]
+                                                  | m <= 99 = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450, translate (-65) 0 $ Scale (1.5) (1.5) $ p,translate 65 0 $ Scale (1.5) (1.5) $ p]
+                                                  | otherwise = Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed",Translate (-267.5) (0) $ drawOption2 "Next Level",color blue $  Translate (35) (0) $ drawOption2 "Restart Level", Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450, translate (-3) 0 $ Scale (1.5) (1.5) $ p]
+transformaJogo (VenceuNivel Quit,4,_,_,_,m,p) | m <= 91 =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", Translate (-267.5) (0) $ drawOption2 "Next Level",Translate (35) (0) $ drawOption2 "Restart Level", color blue $  Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-160) 0 $ Scale (1.5) (1.5) $ p,translate (0) 0 $ Scale (1.5) (1.5) $ p,translate (160) 0 $ Scale (1.5) (1.5) $ p]
+                                              | m <= 99 =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", Translate (-267.5) (0) $ drawOption2 "Next Level",Translate (35) (0) $ drawOption2 "Restart Level", color blue $  Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-65) 0 $ Scale (1.5) (1.5) $ p,translate 65 0 $ Scale (1.5) (1.5) $ p]
+                                              | otherwise =  Pictures [Translate (-250) (150)$ Scale (0.5) (0.5) $ Text "Level Completed", Translate (-267.5) (0) $ drawOption2 "Next Level",Translate (35) (0) $ drawOption2 "Restart Level", color blue $  Translate (400) (0) $ drawOption2 "Quit", rectangleWire 815 450,translate (-3) 0 $ Scale (1.5) (1.5) $ p]
 
 transformaJogo (Pausa (Resume,j),_,_,_,_,_,_) = Pictures [rectangleWire 650 150, color blue $ Translate (-147.5) (-12) $ drawOption3 "Resume", Translate (250) (-12) $ drawOption3 "Quit"]
 transformaJogo (Pausa (Quit,j),_,_,_,_,_,_) = Pictures [rectangleWire 650 150, Translate (-147.5) (-12) $ drawOption3 "Resume",color blue $ Translate (250) (-12) $ drawOption3 "Quit"]
@@ -166,6 +177,21 @@ nivel3 =
     [Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco]
   ] (Jogador (13, 12) Oeste False)
 
+nivel4 :: Jogo 
+nivel4 = 
+  Jogo[ [Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco],
+        [Bloco,Vazio,Vazio,Vazio,Porta,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco],
+        [Bloco,Vazio,Vazio,Vazio,Bloco,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco],
+        [Bloco,Vazio,Vazio,Vazio,Vazio,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco],
+        [Bloco,Vazio,Vazio,Vazio,Vazio,Bloco,Bloco,Bloco,Bloco,Vazio,Vazio,Vazio,Caixa,Caixa,Bloco],
+        [Bloco,Caixa,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco,Bloco,Bloco],
+        [Bloco,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Caixa,Bloco,Vazio,Vazio],
+        [Vazio,Bloco,Caixa,Caixa,Vazio,Vazio,Vazio,Vazio,Vazio,Caixa,Caixa,Caixa,Bloco,Vazio,Vazio],
+        [Vazio,Bloco,Bloco,Bloco,Bloco,Vazio,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Vazio,Vazio],
+        [Vazio,Vazio,Vazio,Vazio,Bloco,Vazio,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
+        [Vazio,Vazio,Vazio,Vazio,Bloco,Bloco,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
+        [Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio]
+      ] (Jogador (8,7) Este False)
 
 desenhaEstadoGloss :: Estado -> Picture
 desenhaEstadoGloss = transformaJogo
@@ -181,16 +207,19 @@ reageEventoGloss (EventKey (SpecialKey KeyUp) Down _ _) (Controlador Temas,0,l,t
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Controlador Temas,0,l,t,n,0,p) = (Tema Default,0,l,t,n,0,p)
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Controlador Sair,0,l,t,n,0,p) = undefined
 
-reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Nivel Nivel1,0,l,t,n,0,p) =( Nivel Nivel2 ,0,l,t,n,0,p)
+reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Nivel Nivel1,0,l,t,n,0,p) =( Nivel Nivel4,0,l,t,n,0,p)
 reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel1,0,l,t,n,0,p) = (Nivel Nivel2,0,l,t,n,0,p)
 reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Nivel Nivel2,0,l,t,n,0,p) =( Nivel Nivel1,0,l,t,n,0,p)
 reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel2,0,l,t,n,0,p) = (Nivel Nivel3,0,l,t,n,0,p)
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel1,0,l,t,n,0,p) =(ModoJogo nivel1,1,l,t,n,0,p)
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel2,0,l,t,n,0,p) = (ModoJogo nivel2,2,l,t,n,0,p)
 reageEventoGloss (EventKey (SpecialKey KeyDelete) Down _ _) (Nivel _,0,l,t,n,0,p) = (Controlador Jogar,0,l,t,n,0,p)
-reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel3,0,l,t,n,0,p) = (Nivel Nivel1,0,l,t,n,0,p)
+reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel3,0,l,t,n,0,p) = (Nivel Nivel4,0,l,t,n,0,p)
 reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Nivel Nivel3,0,l,t,n,0,p) =( Nivel Nivel2,0,l,t,n,0,p)
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel3,0,l,t,n,0,p) = (ModoJogo nivel3,3,l,t,n,0,p)
+reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (Nivel Nivel4,0,l,t,n,0,p) =( Nivel Nivel3,0,l,t,n,0,p)
+reageEventoGloss  (EventKey (SpecialKey KeyDown) Down _ _) (Nivel Nivel4,0,l,t,n,0,p) =( Nivel Nivel1,0,l,t,n,0,p)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Nivel Nivel4,0,l,t,n,0,p) = (ModoJogo nivel4,4,l,t,n,0,p)
 
 reageEventoGloss (EventKey (SpecialKey KeyDown) Down _ _) (Tema Default,0,l,t,n,0,p) = (Tema Minecraft,0,l,t,n,0,p)
 reageEventoGloss (EventKey (SpecialKey KeyDown) Down _ _) (Tema Minecraft,0,l,t,n,0,p) = (Tema Natal,0,l,t,n,0,p)
@@ -218,6 +247,8 @@ reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Quit,o,l
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Next,2,l,t,a,n,p) = (ModoJogo nivel3,3,l,t,a,0,p)
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Restart,2,l,t,a,n,p) = (ModoJogo nivel2,2,l,t,a,0,p)
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Restart,3,l,t,a,n,p) = (ModoJogo nivel3,3,l,t,a,0,p)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Next,3,l,t,a,n,p) = (ModoJogo nivel4,4,l,t,a,0,p)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Restart,4,l,t,a,n,p) = (ModoJogo nivel4,4,l,t,a,0,p)
 
 reageEventoGloss  (EventKey (SpecialKey KeyUp) Down _ _) (ModoJogo j,n,l,t,a,m,p) = if j == moveJogador j Trepar then (ModoJogo (moveJogador j Trepar),n,l,t,a,m,p) else (ModoJogo (moveJogador j Trepar),n,l,t,a,m+1,p)
 reageEventoGloss   (EventKey (SpecialKey KeyDown) Down _ _) (ModoJogo j,n,l,t,a,m,p) =if j == moveJogador j InterageCaixa then (ModoJogo (moveJogador j InterageCaixa),n,l,t,a,m,p) else (ModoJogo (moveJogador j InterageCaixa),n,l,t,a,m+1,p)
@@ -227,6 +258,7 @@ reageEventoGloss  (EventKey (SpecialKey KeyLeft) Down _ _) (ModoJogo j,n,l,t,a,m
 reageEventoGloss (EventKey (Char 'r') Down _ _) (ModoJogo j,n,l,t,a,m,p) | n == 1 = (ModoJogo nivel1,n,l,t,a,0,p) 
                                                                          | n == 2 = (ModoJogo nivel2,n,l,t,a,0,p)
                                                                          | n == 3 = (ModoJogo nivel3,n,l,t,a,0,p)
+                                                                         | n == 4 = (ModoJogo nivel4,n,l,t,a,0,p)
 
 reageEventoGloss (EventKey (Char 'p') Down _ _) (ModoJogo j,n,l,t,a,m,p) = (Pausa (Resume,j),n,l,t,a,m,p)
 reageEventoGloss (EventKey (SpecialKey KeyRight) Down _ _) (Pausa (Resume,j),n,l,t,a,m,p) = (Pausa (Quit,j),n,l,t,a,m,p)
@@ -238,6 +270,7 @@ reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Pausa (Quit,j),n,l,t
 reageEventoGloss _ (ModoJogo v@((Jogo j (Jogador (x,y) b d))), n,l,t,a,m,p) | elem (Porta,(x,y)) (desconstroiMapa j) && n == 1 = (VenceuNivel Next,1,l,t,a,m,p)
                                                                             | elem (Porta,(x,y)) (desconstroiMapa j) && n == 2 = (VenceuNivel Next,2,l,t,a,m,p)
                                                                             | elem (Porta,(x,y)) (desconstroiMapa j) && n == 3 = (VenceuNivel Next,3,l,t,a,m,p)
+                                                                            | elem (Porta,(x,y)) (desconstroiMapa j) && n == 4 = (VenceuNivel Next,4,l,t,a,m,p)
                                                                             |otherwise = (ModoJogo v,n,l,t,a,m,p) 
 reageEventoGloss _ j = j 
 
