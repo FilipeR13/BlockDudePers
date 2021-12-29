@@ -226,6 +226,7 @@ reageEventoGloss  (EventKey (SpecialKey KeyLeft) Down _ _) (ModoJogo j,n,l,t,a,m
 
 reageEventoGloss (EventKey (Char 'r') Down _ _) (ModoJogo j,n,l,t,a,m,p) | n == 1 = (ModoJogo nivel1,n,l,t,a,0,p) 
                                                                          | n == 2 = (ModoJogo nivel2,n,l,t,a,0,p)
+                                                                         | n == 3 = (ModoJogo nivel3,n,l,t,a,0,p)
 
 reageEventoGloss (EventKey (Char 'p') Down _ _) (ModoJogo j,n,l,t,a,m,p) = (Pausa (Resume,j),n,l,t,a,m,p)
 reageEventoGloss (EventKey (SpecialKey KeyRight) Down _ _) (Pausa (Resume,j),n,l,t,a,m,p) = (Pausa (Quit,j),n,l,t,a,m,p)
