@@ -136,7 +136,8 @@ pegar na caixa. De seguida, após verificar que existe uma caixa na direção qu
 
 apanhacaixa :: Mapa -> Coordenadas -> Direcao -> Jogo
 apanhacaixa l (x,y) d | (x == 0 && d == Oeste) || (x == xmax m && d == Este) =  Jogo l (Jogador (x,y) d False)
-                      | elem (Caixa,(x-1,y-1)) m || elem (Bloco,(x-1,y-1)) m || elem (Bloco,(x,y-1)) m = Jogo l (Jogador (x,y) d False)
+                      | d == Oeste && (elem (Caixa,(x-1,y-1)) m || elem (Bloco,(x-1,y-1)) m || elem (Bloco,(x,y-1)) m )= Jogo l (Jogador (x,y) d False)
+                      | d == Este && (elem (Caixa,(x+1,y-1)) m || elem (Bloco,(x+1,y-1)) m || elem (Bloco,(x,y-1)) m )= Jogo l (Jogador (x,y) d False)
                       | d == Oeste && elem (Caixa,(x-1,y)) m = Jogo (constroiMapa (substituicaixa m (Caixa,(x-1,y)))) (Jogador (x,y) Oeste True)
                       | d == Este && elem (Caixa,(x+1,y)) m = Jogo (constroiMapa (substituicaixa m (Caixa,(x+1,y)))) (Jogador (x,y) Este True)
                       | otherwise = Jogo l (Jogador (x,y) d False)
