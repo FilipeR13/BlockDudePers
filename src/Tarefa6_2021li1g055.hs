@@ -86,3 +86,15 @@ A função filtra da lista os movimentos que alteram o jogo com recurso à funç
 
 verificamovimentos :: Jogo -> [Movimento] -> [Movimento]
 verificamovimentos j l = filter (\x -> moveJogador j x /= j ) l
+
+
+{-|
+== Bibliografia
+
+* https://hackage.haskell.org/package/gloss -> Foi utilizado este site para ajudar a compreender o método de funcionamento do Gloss
+
+* https://www.pixilart.com/draw -> Site utilizado para criar as imagens utilizadas para as Pictures
+
+* http://zvon.org/other/haskell/Outputprelude/index.html -> Biblioteca de funções Haskell 
+
+-}
