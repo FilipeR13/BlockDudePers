@@ -5,21 +5,18 @@ Copyright   : Lucas Quintela <a100642@alunos.uminho.pt>;
             : José Rodrigues <a100692@alunos.uminho.pt>;
 
 Módulo para a realização da Tarefa 6 do projeto de LI1 em 2021/22.
+== Dificuldades sentidas
+
+Dificuldades sentidas ao longo desta tarefa:
+
+* Tivemos dificuldade em trabalhar com várias listas ao mesmo tempo, nomeademente listas de listas de pares;
+* Dificuldade em interligar funções auxiliares.
 -}
 module Tarefa6_2021li1g055 where
 
 import LI12122
 import Tarefa4_2021li1g055
 import Tarefa2_2021li1g055
-
-{-|
-== Dificuldades sentidas
-
-Dificuldades sentidas ao longo desta tarefa:
-
-* Tivemos dificuldade em trabalhar com várias listas ao mesmo tempo, nomeademente listas de listas de pares.
-* Dificuldade em interligar funções auxiliares
--}
 
 
 {-|

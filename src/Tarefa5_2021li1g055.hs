@@ -5,6 +5,13 @@ Copyright   : Lucas Quintela <a100642@alunos.uminho.pt>;
             : José Rodrigues <a100692@alunos.uminho.pt>;
             
 Módulo para a realização da Tarefa 5 do projeto de LI1 em 2021/22.
+== Dificuldades sentidas
+
+Algumas das dificuldades sentidas ao longo desta tarefa:
+
+* Demoramos algum tempo a descobrir como implementar a função de mudar de tema no jogo;
+* Como dar load das imagens na função main;
+* De vez em quando sentimos alguma dificuldade em perceber como implementar as diferentes funções no Estado de maneira a cumprir os nossos objetivos.
 -}
 module Main where
 
@@ -15,15 +22,6 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
 import Data.Maybe
 
-{-|
-== Dificuldades sentidas
-
-Algumas das dificuldades sentidas ao longo desta tarefa:
-
-* Demoramos algum tempo a descobrir como implementar a função de mudar de tema no jogo;
-* Como dar load das imagens na função main;
-* De vez em quando sentimos alguma dificuldade em perceber como implementar as diferentes funções no Estado de maneira a cumprir os nossos objetivos;
--}
 
 -- | Data complementar do Menu Principal
 
