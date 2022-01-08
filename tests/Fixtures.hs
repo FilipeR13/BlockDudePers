@@ -216,14 +216,7 @@ m1e6' =
           [Porta,Vazio,Vazio],
           [Bloco,Bloco,Bloco]
         ] (Jogador (0,1) Oeste False)
-nivel1 :: Jogo
-nivel1 = 
-  Jogo   [ [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio],
-    [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
-    [Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco],
-    [Porta, Bloco, Vazio, Vazio, Caixa, Vazio, Bloco],
-    [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]
-  ] (Jogador (6, 0) Oeste False)
+
 m1e7 :: Jogo 
 m1e7 =
   Jogo [[Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
@@ -233,3 +226,23 @@ m1e7 =
         [Bloco,Caixa,Caixa,Vazio,Vazio,Vazio,Vazio,Bloco],
         [Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco]
        ] (Jogador (4,4) Oeste False)
+       
+nivel1 :: Jogo
+nivel1 = 
+  Jogo   [ [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio],
+    [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
+    [Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco],
+    [Porta, Bloco, Vazio, Vazio, Caixa, Vazio, Bloco],
+    [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]
+  ] (Jogador (6, 0) Oeste False)
+
+nivel2 :: Jogo
+nivel2 =
+  Jogo [ [Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
+    [Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
+    [Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
+    [Bloco,Vazio,Vazio,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
+    [Bloco,Porta,Vazio,Bloco,Vazio,Vazio,Vazio,Vazio,Bloco,Vazio,Caixa,Vazio,Bloco,Vazio,Caixa,Vazio,Vazio,Vazio,Vazio,Vazio],
+    [Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Vazio,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco],
+    [Vazio,Vazio,Vazio,Vazio,Vazio,Bloco,Bloco,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio]
+  ] (Jogador (17,4) Este False)
