@@ -75,18 +75,27 @@ Significado das variaveis do estado :
 * Menu -> O construtor do data 'Menu' a ser utilizado nas funções;
 * 1º Int -> Nível que se encontra o jogador            
 * Lista -> Lista que contém os dados para o desenho do jogo pelo Gloss
+
     * Int -> Tema 
     * Par -> Ficheiros do Tema para o Gloss
+
         * Lista -> Lista das pictures das peças
+
             * Par -> Par que fornece ao Gloss as Pictures das peças
+
                 * designa a peça
                 * atribui Picture á Peça
+                
         * Par -> Par que fornece ao Gloss as Pictures do personagem
+
                 * Imagem do personagem orientado para Oeste
                 * Imagem do personagem orientado para Este
+
 * Par -> Pictures do tema atual
+
     * Lista -> Pictures das peças do tema escolhido
     * Par -> Pictures do personagem do tema escolhido
+    
 * 2º Int -> Representa o Tema que está atualmente no jogo;
 * 3º Int -> Representa o número movimentos que foi executado no nível;
 * Picture -> É uma estrela que aparece no final de cada nível;
