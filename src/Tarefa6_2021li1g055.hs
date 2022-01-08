@@ -49,3 +49,40 @@ as novas combinações de movimentos e jogos encontrada.
 
 Para cumprir esse objetivo, a função cria novos pares de movimentos e jogos para cada par da lista que recebe com auxílio da função 'corremovimentosA'
 -}
+corremovimentos :: [([Movimento],Jogo)] -> [([Movimento],Jogo)] 
+corremovimentos [] = []
+corremovimentos ((l,j):t) = corremovimentosA (l,j) (verificamovimentos j  [AndarEsquerda,AndarDireita,Trepar,InterageCaixa]) ++ corremovimentos t 
+{-|
+A função 'corremovimentosA' recebe um par do mesmo formato das funções anteriores e uma lista de movimentos que alteram o jogo presente nesse par. Essa lista de 
+movimentos é calculada com a função 'verificamovimentos'.
+
+Primeiramente a função teste uma série de condições que otimizam a maneira de como são feitas as combinações. Se alguma se verificar, então a função não adiciona
+esse movimento à lista de movimentos do par: 
+
+* Se o último movimento realizado for AndarEsquerda e o movimento que se quer realizar for AndarDireita;
+* Se o último movimento realizado for AndarDireita e o movimento que se quer realizar for AndarEsquerda;
+* Se o último movimento realizado for InterageCaixa e o movimento que se quer realizar for InterageCaixa;
+* Se o último movimento realizado for Trepar, o jogador estiver virado para Oeste e o movimento que se quer realizar for AndarDireita;
+* Se o último movimento realizado for Trepar, o jogador estiver virado para Este e o movimento que se quer realizar for AndarEsqueda.
+
+Se o movimento tiver passado pelas anteriores condições então a função adiciona o mesmo à lista e realiza o movimento no jogo com recurso à função 'moveJogador' defenida
+na Tarefa 4.
+-}
+
+corremovimentosA :: ([Movimento],Jogo) -> [Movimento] -> [([Movimento],Jogo)]
+corremovimentosA _ [] = []
+corremovimentosA (l,j@(Jogo m (Jogador (x,y) b d))) (h:t) | l /= [] && ((last l == AndarEsquerda && h == AndarDireita) || 
+                                           (last l == AndarDireita && h == AndarEsquerda) || 
+                                           (last l == InterageCaixa && h == InterageCaixa)||
+                                           (last l == Trepar && b == Oeste && h == AndarDireita)||
+                                           (last l == Trepar && b == Este && h == AndarEsquerda)) = corremovimentosA (l,j) t
+                             |  otherwise = (l ++ [h], moveJogador j h) : corremovimentosA (l,j) t
+
+{-|
+A função 'verificamovimentos' recebe um jogo e a lista de movimentos que se poderá realizar e devolve a lista de movimentos que alteram o jogo dado.
+
+A função filtra da lista os movimentos que alteram o jogo com recurso à função de ordem superior filter.
+-}
+
+verificamovimentos :: Jogo -> [Movimento] -> [Movimento]
+verificamovimentos j l = filter (\x -> moveJogador j x /= j ) l
