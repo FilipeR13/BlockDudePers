@@ -203,3 +203,33 @@ m1e4 = Jogo m2r (Jogador (17,4) Este False)
 
 m1e5 :: Jogo 
 m1e5 = Jogo m2r' (Jogador (17,4) Este False)
+
+m1e6 :: Jogo
+m1e6 = 
+    Jogo [[Vazio,Vazio,Vazio],
+          [Porta,Vazio,Vazio],
+          [Bloco,Bloco,Bloco]
+        ] (Jogador (2,1) Oeste False)
+m1e6' :: Jogo
+m1e6' = 
+    Jogo [[Vazio,Vazio,Vazio],
+          [Porta,Vazio,Vazio],
+          [Bloco,Bloco,Bloco]
+        ] (Jogador (0,1) Oeste False)
+nivel1 :: Jogo
+nivel1 = 
+  Jogo   [ [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio],
+    [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
+    [Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco],
+    [Porta, Bloco, Vazio, Vazio, Caixa, Vazio, Bloco],
+    [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]
+  ] (Jogador (6, 0) Oeste False)
+m1e7 :: Jogo 
+m1e7 =
+  Jogo [[Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
+        [Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Porta],
+        [Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco],
+        [Bloco,Caixa,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco],
+        [Bloco,Caixa,Caixa,Vazio,Vazio,Vazio,Vazio,Bloco],
+        [Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco]
+       ] (Jogador (4,4) Oeste False)
