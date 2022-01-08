@@ -79,6 +79,10 @@ Significado das variaveis do estado :
 * Par -> Pictures do tema atual
     * Lista -> Pictures das peças do tema escolhido
     * Par -> Pictures do personagem do tema escolhido
+* 2º Int -> Representa o Tema que está atualmente no jogo;
+* 3º Int -> Representa o número movimentos que foi executado no nível;
+* Picture -> É uma estrela que aparece no final de cada nível;
+* Jogo -> É o mapa do easteregg implementado na Tarefa.
 -}
 
 type Estado = (Menu,Int,[(Int,([(Peca,Picture)],(Picture,Picture)))],([(Peca,Picture)],(Picture,Picture)),Int,Int,Picture,Jogo)
@@ -94,6 +98,18 @@ As variáveis desta função são os vários construtores do data 'Menu':
 * Com o construtor "Nivel", a função vai também desenhar as variaãveis do construtor (Nível 1 , Nível 2,...) e vai também tornar azul o texto da variável selecionada.
 * O construtor "Pausa" tem como variável um par que remete para os datas 'Opcoes2' e 'Menu'. Ou seja, este par vai buscar as variáveis "Resume" e "Quit" ao primeiro data e "Jogo" ao segundo. 
 O que vai fazer é desenhar um menu de pausa em cada nível com as opções "Resume" e "Quit" e vai colorir de azul a opção que estiver selecionada.
+* Quando a função recebe o Menu no formato de Tema esta verifica qual é o tema ativo, com recurso ao segundo Int do estado, e desenha um retângulo à volta da opção
+que corresponde a esse tema para assim o identificar. Para além disso, a função torna azul a opção que corresponde ao tipo de Tema recebido no menu.
+
+* Se a função receber o menu num estado Venceunível, esta irá desenhar um retângulo que contém:
+
+    * Um texto na parte superior do retângulo que diz "Level Completed";
+    * Um certo número de estrelas que varia de uma a três que corresponde à prestação do jogador a completar o nível. Para descobrir quantas estrelas deve mostrar, a função
+utiliza o terceiro Int, comparando com valores de movimentos pré escolhidos para cada nível. Até um certo número de movimentos, a função apresenta 3 estrelas. Se passar esse
+número mas não ultrapassar outro, maior q o primeiro, apresenta apenas duas, por fim, apresenta apenas uma se tiver ultrapassado os últimos dois números.
+
+* Por fim, se a função receber um modo de jogo, esta vai passar o jogo para uma picture com recurso à função auxiliar 'transformaJogoAux' e centra o mapa com recurso às funções 
+'ymax' e 'xmax' defenidas em Tarefas anteriores.
 -}
 
 transformaJogo :: Estado -> Picture
@@ -188,6 +204,17 @@ transformaJogo (Pausa (Quit,j),_,_,_,_,_,_,_) = Pictures [rectangleWire 650 150,
 transformaJogo (ModoJogo ((Jogo j (Jogador (x,y) b d))),_,l,t,_,_,_,_) = translate adjustx adjusty (pictures $ transformaJogoAux (desconstroiMapa j) (Jogador (x,y) b d) t) 
                                               where adjusty = 32 * fromIntegral (ymax (desconstroiMapa j)) / 2 
                                                     adjustx = -32 * fromIntegral (xmax (desconstroiMapa j)) / 2
+{-|
+=== Transforma Jogo
+
+A função 'transformaJogoAux' recebe o mapa, as informações do jogador e as pictures para cada componente do mapa e devolve uma lista de pictures.
+
+A função começa por desenhar o mapa. Esta verifica qual peça corresponde à cabeça da lista e atribui a imagem correspondente, aplicando uma translação com base nas
+coordenadas da peça em causa. Quando a função acaba de desenhar o mapa inteiro, esta coloca finalmente o jogador. Para colocar o jogador, a função divide em alguns casos:
+Atribui uma imagem diferente dependente da direção que o jogador se encontra; Verifica se possui uma caixa consigo, caso afirmativo, irá colocar a imagem da caixa em cima do
+jogador também baseada nas coordenadas que o jogador possui.
+-}
+
 transformaJogoAux :: [(Peca,Coordenadas)] -> Jogador -> ([(Peca,Picture)],(Picture,Picture)) -> [Picture]
 transformaJogoAux [] (Jogador (x,y) dir b) l = case dir of Este -> if b then [translate z w (snd (snd l)), translate z w' (fromJust (lookup Caixa (fst l)))] else [translate z w (snd (snd l))]
                                                            Oeste -> if b then [translate z w (fst (snd l)), translate z w' (fromJust (lookup Caixa (fst l)))] else [translate z w (fst (snd l))]    
@@ -213,6 +240,22 @@ drawOption2 option = Translate (-100) (-190) $ Scale (0.3) (0.3) $ Text option
 drawOption3 option = Translate (-100) (0) $ Scale (0.4) (0.4) $ Text option
 drawOption4 option = Translate (-120) 0 $ Scale (0.5) (0.5) $ Text option
 
+{-|
+== Estado Inicial
+
+A função 'estadoGlossInicial' é a função que dá o primeiro Estado que o Gloss recebe. 
+
+Esta função dá como primeiro estado:
+
+ * O menu com Jogar pré-selecionado;
+ * Um 0 que é o nível inicial, porém como se encontra no menu, este Int é 0;
+ * Uma lista, que é a lista de todos os Temas para poderem ser selecionados prosteriormente;
+ * Um tema inicial, que corresponde ao tema default;
+ * O número 1, pois o tema inicial corresponde a este número;
+ * O número 0, que, por causa de ainda estar num menu, o número de movimentos tem de ser nulo;
+ * A picture da estrela para ser usada nos finais dos níveis;
+ * O mapa do Easter Egg para ser usado num momento específico num dos níveis.
+-}
 estadoGlossInicial :: [(Int,([(Peca,Picture)],(Picture,Picture)))]-> Picture -> Estado 
 estadoGlossInicial l p = (Controlador Jogar,0,l,fromJust (lookup 1 l),1,0,p, easteregg)
 
@@ -354,6 +397,26 @@ de todas os temas.
 Se o jogador quando se encontrar em algum nível pressionar a tecla "p", é levado para o menu Pausa em que vai poder escolher as
 opções "Resume" se quiser voltar ao jogo, ou "Quit" se quiser voltar para o menu principal. A função faz isso através do mesmo 
 método descrito em cima, isto é, mudar o construtor do Estado.
+
+Se a função receber um Menu da forma VenceuNivel irá permitir que o jogador troque e selecione entre as opções "Next Level", "Restart Level" e "Quit" com execeção
+do nível 6, pois, sendo o último nível, apenas poderá trocar entre as opções "Restart Level" e "Quit". Se selecionar a opção "Next level", a função devolve um ModoJogo
+com o nível correspondente ao próximo e troca o inteiro identificador do nível para o novo. Se selecionar "Restart Level" a função devolve um ModoJogo com o mesmo nível
+e não altera o nível. Por fim, ao selecionar "Quit" a função mandao jogador para o menu principal e torna o Int 0.
+
+Esta função deteta um movimento particular no nível 3. Se o jogador estiver numa posição específica do mapa e executar um movimento específico, é levado para um mapa
+que está no estado desde o inicio. Para além disso, a função coloca o mapa atual no lugar do easter egg para assim não perder o progresso, e troca o Int identificador
+de nível para 7.
+Importante de referir, que a função está adaptada especialmente para o easter egg. Assim, se a função receber o 7 na identificação do nível, esta reconhece q não deve
+adicionar movimentos. Desta maneira, o jogador ao voltar para o nível 3 não perde pontuação por movimentos executados no mapa do easter egg.
+
+Assim, se receber um Int diferente de 7 no lugar da identificação do nível, a função vai executar o movimento correspondente à tecla pressionada e irá adicionar um
+movimento no Int do estado correspondente se o mapa for modificado com esse movimento.
+
+Se o jogador estiver em algum nível e pressionar a tecla R, o jogo será reiniciado. Para identificar que nível que deve voltar, ele verifica qual é o número do nível
+presente no estado.
+
+Por fim, a função verifica se chegou na porta, ignorando qualquer evento. Assim, quando um jogador chega na porta, devolve o estado do menu como VenceuNivel. De salientar
+que neste momento está declarado o numero de movimentos executados ao longo do nível o que permite posteriormente determinar o número de estrelas correspondentes à performance.
 -}
 
 
@@ -457,16 +520,36 @@ reageEventoGloss _ (ModoJogo v@((Jogo j (Jogador (x,y) b d))), n,l,t,a,m,p,e) | 
                                                                               | otherwise = (ModoJogo v,n,l,t,a,m,p,e) 
 reageEventoGloss _ j = j 
 
+{-|
+==Reage Tempo 
+
+A função 'reageTempoGloss' reage ao tempo que passa, no entanto não é necessária para o nosso jogo, pelo que não faz nada.
+-}
 reageTempoGloss:: Float -> Estado -> Estado
 reageTempoGloss _ w = w
 
+{-|
+== Frame Rate
+
+A função 'fr' define a frame rate do jogo. Está defenida como 50. 
+-}
 fr :: Int
 fr = 50
 
+{-|
+== Display
+
+A função 'dm' dá a tela em que o jogo será mostrado. Foi escolhido executar o jogo em fullscreen.
+-}
 dm :: Display
 dm = FullScreen
 
+{-|
+== Main
 
+A função 'main' é a função principal que recebe as pictures e as dá à função 'estadoGlossInicial' para puderem ser usadas no jogo. Também recebe as funções para
+que o jogo possa ser jogável.
+-}
 main :: IO ()
 main = do
   caixa <- loadBMP "caixaDefault.bmp"
