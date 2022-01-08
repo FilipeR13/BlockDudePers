@@ -18,26 +18,34 @@ import Data.Maybe
 {-|
 == Dificuldades sentidas
 
-Algumas das dificuldades sentidas ao longo desta fase:
+Algumas das dificuldades sentidas ao longo desta tarefa:
 
 * Demoramos algum tempo a descobrir como implementar a função de mudar de tema no jogo;
 * Como dar load das imagens na função main;
 * De vez em quando sentimos alguma dificuldade em perceber como implementar as diferentes funções no Estado de maneira a cumprir os nossos objetivos;
 -}
 
+-- | Data complementar do Menu Principal
+
 data Opcoes = Jogar 
             | Sair
             | Temas
+
+-- | Data complementar do Menu Pausa e Menu VenceuNivel
 
 data Opcoes2 = Next
               |Restart
               |Quit
               |Resume
 
+-- | Data complementar do Menu Temas 
+
 data Theme = Default
            | Minecraft
            | Natal
            | Inferno
+
+-- | Data complementar do Menu Níveis
 
 data Niveis = Nivel1 
             | Nivel2
@@ -45,7 +53,8 @@ data Niveis = Nivel1
             | Nivel4
             | Nivel5
             | Nivel6
-            | EasterEgg
+  
+-- | Data do Menu Principal
 
 data Menu = Controlador Opcoes
           | Pausa (Opcoes2, Jogo) 
@@ -204,6 +213,7 @@ transformaJogo (Pausa (Quit,j),_,_,_,_,_,_,_) = Pictures [rectangleWire 650 150,
 transformaJogo (ModoJogo ((Jogo j (Jogador (x,y) b d))),_,l,t,_,_,_,_) = translate adjustx adjusty (pictures $ transformaJogoAux (desconstroiMapa j) (Jogador (x,y) b d) t) 
                                               where adjusty = 32 * fromIntegral (ymax (desconstroiMapa j)) / 2 
                                                     adjustx = -32 * fromIntegral (xmax (desconstroiMapa j)) / 2
+
 {-|
 === Transforma Jogo
 
@@ -232,12 +242,37 @@ transformaJogoAux m@((p,(a,b)):t) (Jogador (x,y) dir s) l
 {-|
 === DrawOption
 
-Estas funções tẽm todas o mesmo objetivo -> Aplicam um conjunto de modificações a um texto e transforma o numa Picture.
+Esta função tem como objetivo aplicar um conjunto de modificações a um texto e transforma o numa Picture.
 -}
 
 drawOption option = Translate (-50) 0 $ Scale (0.5) (0.5) $ Text option
+
+{-|
+=== DrawOption2
+
+Esta função tem como objetivo aplicar um conjunto de modificações a um texto e transforma o numa Picture.
+-}
+
+
 drawOption2 option = Translate (-100) (-190) $ Scale (0.3) (0.3) $ Text option
+
+{-|
+=== DrawOption3
+
+Esta função tem como objetivo aplicar um conjunto de modificações a um texto e transforma o numa Picture.
+-}
+
+
+
 drawOption3 option = Translate (-100) (0) $ Scale (0.4) (0.4) $ Text option
+
+{-|
+=== DrawOption4
+
+Esta função tem como objetivo aplicar um conjunto de modificações a um texto e transforma o numa Picture.
+-}
+
+
 drawOption4 option = Translate (-120) 0 $ Scale (0.5) (0.5) $ Text option
 
 {-|
@@ -256,8 +291,11 @@ Esta função dá como primeiro estado:
  * A picture da estrela para ser usada nos finais dos níveis;
  * O mapa do Easter Egg para ser usado num momento específico num dos níveis.
 -}
+
 estadoGlossInicial :: [(Int,([(Peca,Picture)],(Picture,Picture)))]-> Picture -> Estado 
 estadoGlossInicial l p = (Controlador Jogar,0,l,fromJust (lookup 1 l),1,0,p, easteregg)
+
+-- | Nível 1 do Jogo
 
 nivel1 :: Jogo
 nivel1 = 
@@ -267,6 +305,8 @@ nivel1 =
     [Porta, Bloco, Vazio, Vazio, Caixa, Vazio, Bloco],
     [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]
   ] (Jogador (6, 0) Oeste False)
+
+-- | Nível 2 do Jogo
 
 nivel2 :: Jogo
 nivel2 =
@@ -278,6 +318,8 @@ nivel2 =
     [Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Vazio,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco],
     [Vazio,Vazio,Vazio,Vazio,Vazio,Bloco,Bloco,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio]
   ] (Jogador (17,4) Este False)
+
+-- | Nível 3 do Jogo
 
 nivel3 :: Jogo
 nivel3 = 
@@ -298,6 +340,8 @@ nivel3 =
     [Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco]
   ] (Jogador (13, 12) Oeste False)
 
+-- | Nível 4 do Jogo
+
 nivel4 :: Jogo 
 nivel4 = 
   Jogo[ [Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco],
@@ -313,6 +357,8 @@ nivel4 =
         [Vazio,Vazio,Vazio,Vazio,Bloco,Bloco,Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio],
         [Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio]
       ] (Jogador (8,7) Este False)
+
+-- | Nível 5 do Jogo
 
 nivel5 :: Jogo 
 nivel5 = 
@@ -333,6 +379,8 @@ nivel5 =
     [Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco]
     ] (Jogador (12,13) Este False)
 
+-- | Nível 6 do Jogo
+
 nivel6 :: Jogo 
 nivel6 = 
   Jogo [ [Bloco,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco],
@@ -348,6 +396,8 @@ nivel6 =
          [Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco,Caixa,Caixa,Vazio,Vazio,Vazio,Caixa,Bloco,Vazio,Vazio],
          [Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Bloco,Vazio,Vazio]
   ] (Jogador (7,6) Este False)
+
+-- | Nível EasterEgg do Jogo
 
 easteregg :: Jogo 
 easteregg = 
@@ -418,7 +468,6 @@ presente no estado.
 Por fim, a função verifica se chegou na porta, ignorando qualquer evento. Assim, quando um jogador chega na porta, devolve o estado do menu como VenceuNivel. De salientar
 que neste momento está declarado o numero de movimentos executados ao longo do nível o que permite posteriormente determinar o número de estrelas correspondentes à performance.
 -}
-
 
 reageEventoGloss :: Event -> Estado -> Estado
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (Controlador Jogar,0,l,t,n,0,p,e) = (Nivel Nivel1,0,l,t,n,0,p,e)
@@ -525,6 +574,7 @@ reageEventoGloss _ j = j
 
 A função 'reageTempoGloss' reage ao tempo que passa, no entanto não é necessária para o nosso jogo, pelo que não faz nada.
 -}
+
 reageTempoGloss:: Float -> Estado -> Estado
 reageTempoGloss _ w = w
 
@@ -533,6 +583,7 @@ reageTempoGloss _ w = w
 
 A função 'fr' define a frame rate do jogo. Está defenida como 50. 
 -}
+
 fr :: Int
 fr = 50
 
@@ -541,6 +592,7 @@ fr = 50
 
 A função 'dm' dá a tela em que o jogo será mostrado. Foi escolhido executar o jogo em fullscreen.
 -}
+
 dm :: Display
 dm = FullScreen
 
@@ -550,6 +602,7 @@ dm = FullScreen
 A função 'main' é a função principal que recebe as pictures e as dá à função 'estadoGlossInicial' para puderem ser usadas no jogo. Também recebe as funções para
 que o jogo possa ser jogável.
 -}
+
 main :: IO ()
 main = do
   caixa <- loadBMP "caixaDefault.bmp"
