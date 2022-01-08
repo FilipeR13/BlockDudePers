@@ -5,6 +5,7 @@ Copyright   : Lucas Quintela <a100642@alunos.uminho.pt>;
             : José Rodrigues <a100692@alunos.uminho.pt>;
             
 Módulo para a realização da Tarefa 5 do projeto de LI1 em 2021/22.
+
 == Dificuldades sentidas
 
 Algumas das dificuldades sentidas ao longo desta tarefa:
