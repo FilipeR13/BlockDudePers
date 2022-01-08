@@ -72,7 +72,7 @@ type Estado = (Menu,Int,[(Int,([(Peca,Picture)],(Picture,Picture)))],([(Peca,Pic
 Para começar temos o type 'Estado', este type é o conjunto de informações que vão ser utilizadas ao longo da tarefa.
 Significado das variaveis do estado :
 
-* Menu -> O construtor do data 'Menu' a ser utilizado nas funções;
+* Menu -> O construtor do data /Menu/ a ser utilizado nas funções;
 * 1º Int -> Nível que se encontra o jogador            
 * Lista -> Lista que contém os dados para o desenho do jogo pelo Gloss
 
@@ -95,7 +95,7 @@ Significado das variaveis do estado :
 
     * Lista -> Pictures das peças do tema escolhido
     * Par -> Pictures do personagem do tema escolhido
-    
+
 * 2º Int -> Representa o Tema que está atualmente no jogo;
 * 3º Int -> Representa o número movimentos que foi executado no nível;
 * Picture -> É uma estrela que aparece no final de cada nível;
@@ -111,21 +111,21 @@ A função 'transformaJogo' é a função que vai transformar o Estado numa só 
 
 As variáveis desta função são os vários construtores do data 'Menu':
 
-* Com o construtor "Controlador" , a função desenha as variáveis do construtor (Jogar, Tema e Sair) e torna azul o texto da variável que recebeu.
-* Com o construtor "Nivel", a função vai também desenhar as variaãveis do construtor (Nível 1 , Nível 2,...) e vai também tornar azul o texto da variável selecionada.
-* O construtor "Pausa" tem como variável um par que remete para os datas 'Opcoes2' e 'Menu'. Ou seja, este par vai buscar as variáveis "Resume" e "Quit" ao primeiro data e "Jogo" ao segundo. 
-O que vai fazer é desenhar um menu de pausa em cada nível com as opções "Resume" e "Quit" e vai colorir de azul a opção que estiver selecionada.
+* Com o construtor /Controlador/ , a função desenha as variáveis do construtor (Jogar, Tema e Sair) e torna azul o texto da variável que recebeu.
+* Com o construtor /Nivel/, a função vai também desenhar as variaãveis do construtor (Nível 1 , Nível 2,...) e vai também tornar azul o texto da variável selecionada.
+* O construtor /Pausa/ tem como variável um par que remete para os datas 'Opcoes2' e 'Menu'. Ou seja, este par vai buscar as variáveis /Resume/ e /Quit/ ao primeiro data e /Jogo/ ao segundo. 
+O que vai fazer é desenhar um menu de pausa em cada nível com as opções /Resume/ e /Quit/ e vai colorir de azul a opção que estiver selecionada.
 * Quando a função recebe o Menu no formato de Tema esta verifica qual é o tema ativo, com recurso ao segundo Int do estado, e desenha um retângulo à volta da opção
 que corresponde a esse tema para assim o identificar. Para além disso, a função torna azul a opção que corresponde ao tipo de Tema recebido no menu.
 
 * Se a função receber o menu num estado Venceunível, esta irá desenhar um retângulo que contém:
 
-    * Um texto na parte superior do retângulo que diz "Level Completed";
+    * Um texto na parte superior do retângulo que diz /Level Completed/;
     * Um certo número de estrelas que varia de uma a três que corresponde à prestação do jogador a completar o nível. Para descobrir quantas estrelas deve mostrar, a função
 utiliza o terceiro Int, comparando com valores de movimentos pré escolhidos para cada nível. Até um certo número de movimentos, a função apresenta 3 estrelas. Se passar esse
 número mas não ultrapassar outro, maior q o primeiro, apresenta apenas duas, por fim, apresenta apenas uma se tiver ultrapassado os últimos dois números.
 
-* Por fim, se a função receber um modo de jogo, esta vai passar o jogo para uma picture com recurso à função auxiliar 'transformaJogoAux' e centra o mapa com recurso às funções 
+* Por fim, se a função receber um /ModoJogo/, esta vai passar o jogo para uma picture com recurso à função auxiliar 'transformaJogoAux' e centra o mapa com recurso às funções 
 'ymax' e 'xmax' defenidas em Tarefas anteriores.
 -}
 
@@ -438,28 +438,28 @@ easteregg =
 
 A função 'reageEventoGloss' é a função que vai permitir jogar o jogo em si, isto é, vai atribuir comandos ao pressionar das teclas.
 
-Se a função receber o construtor "Controlador" vai permitir ao jogador viajar entre as opções desse construtor. Isto é, vai poder
-mudar, no menu inicial, entre as opções "Play", " Themes" e "Exit" e selecionar a que pretender. Se selecionar a opção "Play" a
-função muda o construtor do Estado para "Nivel ..", ou seja, inicia o menu dos níveis em que vai ser possível selecionar o nível
-pretendido. Se selecionar a opção "Themes" a função leva o jogador para o menu dos temas, trocando a variável do construtor inicial 
-para "Temas". Por fim, se selecionar a opcão "Sair", o jogo fecha.
+Se a função receber o construtor /Controlador/ vai permitir ao jogador viajar entre as opções desse construtor. Isto é, vai poder
+mudar, no menu inicial, entre as opções /Play/, /Themes/ e /Exit/ e selecionar a que pretender. Se selecionar a opção /Play/ a
+função muda o construtor do Estado para /Nivel ../, ou seja, inicia o menu dos níveis em que vai ser possível selecionar o nível
+pretendido. Se selecionar a opção /Themes/ a função leva o jogador para o menu dos temas, trocando a variável do construtor inicial 
+para /Temas/. Por fim, se selecionar a opcão /Sair/, o jogo fecha.
 
-Quando recebe o construtor "Nivel ..." é o que permite escolher qual nível jogar. Resumidamente, ao pressionar a tecla
-"Enter" na opção de algum nível, o que a função vai fazer é mudar o construtor do Estado para "Modo Jogo" sendo o argumento do 
+Quando recebe o construtor /Nivel .../ é o que permite escolher qual nível jogar. Resumidamente, ao pressionar a tecla
+/Enter/ na opção de algum nível, o que a função vai fazer é mudar o construtor do Estado para /Modo Jogo/ sendo o argumento do 
 construtor o nível escolhido.
 
-Com o construtor "Tema" é o que permite selecionar com qual tema se vai jogar. O que a função faz quando se pressiona "Enter" é
+Com o construtor /Tema/ é o que permite selecionar com qual tema se vai jogar. O que a função faz quando se pressiona /Enter/ é
 mudar o argumento dos temas no Estado para o tema correspondente. Para isso vai procurar o Int referente a cada tema na lista
 de todas os temas.
 
-Se o jogador quando se encontrar em algum nível pressionar a tecla "p", é levado para o menu Pausa em que vai poder escolher as
-opções "Resume" se quiser voltar ao jogo, ou "Quit" se quiser voltar para o menu principal. A função faz isso através do mesmo 
+Se o jogador quando se encontrar em algum nível pressionar a tecla /p/, é levado para o menu Pausa em que vai poder escolher as
+opções /Resume/ se quiser voltar ao jogo, ou /Quit/ se quiser voltar para o menu principal. A função faz isso através do mesmo 
 método descrito em cima, isto é, mudar o construtor do Estado.
 
-Se a função receber um Menu da forma VenceuNivel irá permitir que o jogador troque e selecione entre as opções "Next Level", "Restart Level" e "Quit" com execeção
-do nível 6, pois, sendo o último nível, apenas poderá trocar entre as opções "Restart Level" e "Quit". Se selecionar a opção "Next level", a função devolve um ModoJogo
-com o nível correspondente ao próximo e troca o inteiro identificador do nível para o novo. Se selecionar "Restart Level" a função devolve um ModoJogo com o mesmo nível
-e não altera o nível. Por fim, ao selecionar "Quit" a função mandao jogador para o menu principal e torna o Int 0.
+Se a função receber um Menu da forma /VenceuNivel/ irá permitir que o jogador troque e selecione entre as opções /Next Level/, /Restart Level/ e /Quit/ com execeção
+do nível 6, pois, sendo o último nível, apenas poderá trocar entre as opções /Restart Level e /Quit/. Se selecionar a opção /Next level/, a função devolve um /ModoJogo/
+com o nível correspondente ao próximo e troca o inteiro identificador do nível para o novo. Se selecionar /Restart Level/ a função devolve um /ModoJogo/ com o mesmo nível
+e não altera o nível. Por fim, ao selecionar /Quit/ a função mandao jogador para o menu principal e torna o Int 0.
 
 Esta função deteta um movimento particular no nível 3. Se o jogador estiver numa posição específica do mapa e executar um movimento específico, é levado para um mapa
 que está no estado desde o inicio. Para além disso, a função coloca o mapa atual no lugar do easter egg para assim não perder o progresso, e troca o Int identificador
@@ -473,7 +473,7 @@ movimento no Int do estado correspondente se o mapa for modificado com esse movi
 Se o jogador estiver em algum nível e pressionar a tecla R, o jogo será reiniciado. Para identificar que nível que deve voltar, ele verifica qual é o número do nível
 presente no estado.
 
-Por fim, a função verifica se chegou na porta, ignorando qualquer evento. Assim, quando um jogador chega na porta, devolve o estado do menu como VenceuNivel. De salientar
+Por fim, a função verifica se chegou na porta, ignorando qualquer evento. Assim, quando um jogador chega na porta, devolve o estado do menu como /VenceuNivel/. De salientar
 que neste momento está declarado o numero de movimentos executados ao longo do nível o que permite posteriormente determinar o número de estrelas correspondentes à performance.
 -}
 
