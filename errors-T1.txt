@@ -1,0 +1,9 @@
+### Error in:   0:10:Valida Mapa 11
+<<timeout>>
+CallStack (from HasCallStack):
+  error, called at tests/Fase1.hs:48:27 in main:Main
+### Error in:   0:17:"Invalido 04: n\227o tem caminho"
+<<timeout>>
+CallStack (from HasCallStack):
+  error, called at tests/Fase1.hs:48:27 in main:Main
+Cases: 22  Tried: 22  Errors: 2  Failures: 0

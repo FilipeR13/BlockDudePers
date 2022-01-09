@@ -1,0 +1,62 @@
+2021li1g055-0.1.0.0: unregistering (local file changes: 2021li1g055.cabal src/LI12122.hs src/Tarefa1_2021li1g055.hs src/Tarefa2_2021li1g055.hs src/Tarefa...)
+2021li1g055> configure (lib)
+Configuring 2021li1g055-0.1.0.0...
+2021li1g055> build (lib)
+Preprocessing library for 2021li1g055-0.1.0.0..
+Building library for 2021li1g055-0.1.0.0..
+[1 of 5] Compiling LI12122
+[2 of 5] Compiling Tarefa1_2021li1g055
+[3 of 5] Compiling Tarefa2_2021li1g055
+[4 of 5] Compiling Tarefa3_2021li1g055
+[5 of 5] Compiling Tarefa4_2021li1g055
+2021li1g055> haddock
+Preprocessing library for 2021li1g055-0.1.0.0..
+Running Haddock on library for 2021li1g055-0.1.0.0..
+Haddock coverage:
+  92% ( 11 / 12) in 'LI12122'
+  Missing documentation for:
+    Mapa (src/LI12122.hs:28)
+Warning: 'verficarPorta' is out of scope.
+    If you qualify the identifier, haddock can try to link it anyway.
+  26% (  5 / 19) in 'Tarefa1_2021li1g055'
+  Missing documentation for:
+    validaPotencialMapa (src/Tarefa1_2021li1g055.hs:13)
+    soCoordenadas (src/Tarefa1_2021li1g055.hs:33)
+    validaCoordenadasA (src/Tarefa1_2021li1g055.hs:37)
+    listCaixas (src/Tarefa1_2021li1g055.hs:78)
+    verificaCaixa (src/Tarefa1_2021li1g055.hs:81)
+    caixasTemBase (src/Tarefa1_2021li1g055.hs:85)
+    caixaTemBase (src/Tarefa1_2021li1g055.hs:90)
+    espacosVazios (src/Tarefa1_2021li1g055.hs:108)
+    soPecas (src/Tarefa1_2021li1g055.hs:115)
+    soBlocoscomCoordenadas (src/Tarefa1_2021li1g055.hs:142)
+    verificacontinuidade (src/Tarefa1_2021li1g055.hs:147)
+    primeirobloco (src/Tarefa1_2021li1g055.hs:154)
+    primeiracoluna (src/Tarefa1_2021li1g055.hs:157)
+    ultimacoluna (src/Tarefa1_2021li1g055.hs:161)
+Warning: 'descontroiMapa' is out of scope.
+    If you qualify the identifier, haddock can try to link it anyway.
+Warning: 'desconstroilihas' is out of scope.
+    If you qualify the identifier, haddock can try to link it anyway.
+  83% ( 10 / 12) in 'Tarefa2_2021li1g055'
+  Missing documentation for:
+    insere (src/Tarefa2_2021li1g055.hs:73)
+    ymax (src/Tarefa2_2021li1g055.hs:107)
+ 100% (  5 /  5) in 'Tarefa3_2021li1g055'
+Warning: 'corrermovimentos' is out of scope.
+    If you qualify the identifier, haddock can try to link it anyway.
+  93% ( 13 / 14) in 'Tarefa4_2021li1g055'
+  Missing documentation for:
+    verificaposicaodireita (src/Tarefa4_2021li1g055.hs:98)
+Documentation created:
+.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.4.0.0/doc/html/2021li1g055/index.html,
+.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.4.0.0/doc/html/2021li1g055/2021li1g055.txt
+2021li1g055> copy/register
+Installing library in /home/nelson/Documents/LI1/projectos/2021li1g055/.stack-work/install/x86_64-linux-tinfo6/e619e721cfd93d212e783f07e0e112de47ec2ce9746d976e44e04c843f2a0455/9.0.1/lib/x86_64-linux-ghc-9.0.1/2021li1g055-0.1.0.0-8Abpd7MrQKaBANu2KiNByE
+Registering library for 2021li1g055-0.1.0.0..
+Updating Haddock index for local packages in
+/home/nelson/Documents/LI1/projectos/2021li1g055/.stack-work/install/x86_64-linux-tinfo6/e619e721cfd93d212e783f07e0e112de47ec2ce9746d976e44e04c843f2a0455/9.0.1/doc/index.html
+Updating Haddock index for local packages and dependencies in
+/home/nelson/Documents/LI1/projectos/2021li1g055/.stack-work/install/x86_64-linux-tinfo6/e619e721cfd93d212e783f07e0e112de47ec2ce9746d976e44e04c843f2a0455/9.0.1/doc/all/index.html
+Haddock index for snapshot packages already up to date at:
+/home/nelson/.stack/snapshots/x86_64-linux-tinfo6/e619e721cfd93d212e783f07e0e112de47ec2ce9746d976e44e04c843f2a0455/9.0.1/doc/index.html

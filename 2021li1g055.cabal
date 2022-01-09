@@ -25,5 +25,7 @@ test-suite 2021li1g055-test
     build-depends:
         2021li1g055
         , base ^>=4.15.0.0
+        , call-stack
+        , deepseq
         , HUnit
     default-language: Haskell2010
