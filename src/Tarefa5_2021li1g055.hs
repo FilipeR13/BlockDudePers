@@ -539,6 +539,7 @@ reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Restart,
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Next,3,l,t,a,n,p,e) = (ModoJogo nivel4,4,l,t,a,0,p,e)
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Restart,4,l,t,a,n,p,e) = (ModoJogo nivel4,4,l,t,a,0,p,e)
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Next,4,l,t,a,n,p,e) = (ModoJogo nivel5,5,l,t,a,0,p,e)
+reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Next,5,l,t,a,n,p,e) = (ModoJogo nivel6,6,l,t,a,0,p,e)
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Restart,5,l,t,a,n,p,e) = (ModoJogo nivel5,5,l,t,a,0,p,e)
 reageEventoGloss (EventKey (SpecialKey KeyEnter) Down _ _) (VenceuNivel Restart,6,l,t,a,n,p,e) = (ModoJogo nivel6,6,l,t,a,0,p,e)
 
